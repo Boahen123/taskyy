@@ -34,7 +34,13 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: _taskView(),
-      floatingActionButton: _addTask(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(padding: const EdgeInsets.only(left: 40.0), child: _help()),
+          _addTask(),
+        ],
+      ),
     );
   }
 
@@ -86,6 +92,14 @@ class _HomeState extends State<Home> {
         child: const Icon(Icons.add));
   }
 
+  Widget _help() {
+    return FloatingActionButton(
+      onPressed: _helpPopup,
+      tooltip: 'Info',
+      child: const Icon(Icons.info_sharp),
+    );
+  }
+
   Widget _taskView() {
     return FutureBuilder(
         future: Hive.openBox('tasks'),
@@ -127,6 +141,21 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          );
+        });
+  }
+
+  void _helpPopup() {
+    showDialog(
+        context: context,
+        builder: (BuildContext contextt) {
+          return AlertDialog(
+            title: const Text("Info"),
+            content: const SingleChildScrollView(
+                child: Text(
+                    "1. Plus icon to add new task.\n2. Tap tile to mark as complete.\n3. Long press tile to remove task tile.")),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
           );

@@ -4,7 +4,7 @@ import 'package:taskyy/pages/home.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
-  await Hive.initFlutter();
+  await Hive.initFlutter("hives");
   Hive.registerAdapter(TaskAdapter());
   runApp(const MainApp());
 }
