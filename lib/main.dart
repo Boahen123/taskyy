@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:taskyy/models/task.dart';
 import 'package:taskyy/pages/home.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:taskyy/models/boxes.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskAdapter());
-  boxTasks = await Hive.openBox('tasksBox');
   runApp(const MainApp());
 }
 

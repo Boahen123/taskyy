@@ -4,12 +4,12 @@ part 'task.g.dart';
 
 @HiveType(typeId: 1)
 class Task {
-  @HiveField(0)
-  String content;
-  @HiveField(1)
-  DateTime date;
-  @HiveField(2)
+  @HiveField(7, defaultValue: "")
+  String? content;
+  @HiveField(8)
   bool isComplete;
+  @HiveField(9)
+  String date;
 
   Task({
     required this.content,

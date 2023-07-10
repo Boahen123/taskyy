@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskyy/main.dart';
 import 'package:intl/intl.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:taskyy/models/boxes.dart';
 import 'package:taskyy/models/task.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -44,20 +44,39 @@ class _HomeState extends State<Home> {
   }
 
   Widget _taskList() {
-    List<Widget> tasks = <Widget>[
-      ListTile(
-        title: const Text("Eat banku!",
-            style: TextStyle(decoration: TextDecoration.lineThrough)),
-        subtitle: Text(_getDate()),
-        trailing: Icon(
-          Icons.check_box_outlined,
-          color: customColor[800],
-        ),
-      )
-    ];
-    return ListView(
-      children: tasks,
-    );
+    return ListView.builder(
+        itemCount: boxTasks.length,
+        itemBuilder: (BuildContext context, int index) {
+          Task task = boxTasks.getAt(index);
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 3.0),
+            child: Card(
+              child: ListTile(
+                title: Text("${task.content}",
+                    style: TextStyle(
+                        decoration: task.isComplete
+                            ? TextDecoration.lineThrough
+                            : null)),
+                subtitle: Text(task.date),
+                trailing: Icon(
+                  task.isComplete
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank_outlined,
+                  color: customColor[800],
+                ),
+                onTap: () {
+                  task.isComplete = !task.isComplete;
+                  boxTasks.putAt(index, task);
+                  setState(() {});
+                },
+                onLongPress: () {
+                  boxTasks.deleteAt(index);
+                  setState(() {});
+                },
+              ),
+            ),
+          );
+        });
   }
 
   Widget _addTask() {
@@ -68,21 +87,17 @@ class _HomeState extends State<Home> {
   }
 
   Widget _taskView() {
-    boxTasks.put('task3',
-        Task(content: "BAnku", date: DateTime.now(), isComplete: false));
-    return ListView.builder(
-        itemCount: boxTasks.length,
-        itemBuilder: (BuildContext context, int index) {
-          Task task = boxTasks.getAt(index);
-          return ListTile(
-            title: Text(task.content,
-                style: const TextStyle(decoration: TextDecoration.lineThrough)),
-            subtitle: Text("${task.date}"),
-            trailing: Icon(
-              Icons.check_box_outlined,
-              color: customColor[800],
-            ),
-          );
+    return FutureBuilder(
+        future: Hive.openBox('tasks'),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            boxTasks = snapshot.data;
+            return _taskList();
+          } else if (snapshot.hasError) {
+            return const Text('Error');
+          } else {
+            return const CircularProgressIndicator();
+          }
         });
   }
 
@@ -94,7 +109,17 @@ class _HomeState extends State<Home> {
             title: const Text("Add Task"),
             content: SingleChildScrollView(
               child: TextField(
-                onSubmitted: (value) {},
+                onSubmitted: (value) {
+                  if (newTask != null) {
+                    var task = Task(
+                        content: newTask, date: _getDate(), isComplete: false);
+                    boxTasks.add(task);
+                    setState(() {
+                      newTask = null;
+                      Navigator.pop(context);
+                    });
+                  }
+                },
                 onChanged: (textInput) {
                   setState(() {
                     newTask = textInput;
