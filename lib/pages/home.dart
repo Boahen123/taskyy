@@ -20,8 +20,9 @@ class _HomeState extends State<Home> {
         title: Center(
           child: Text(
             'Taskyy!',
-            style:
-                TextStyle(fontSize: _deviceWidth * 0.10, color: Colors.white),
+            style: TextStyle(
+              fontSize: _deviceWidth * 0.10,
+            ),
           ),
         ),
       ),
