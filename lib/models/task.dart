@@ -1,6 +1,14 @@
+import 'package:hive/hive.dart';
+
+part 'task.g.dart';
+
+@HiveType(typeId: 1)
 class Task {
+  @HiveField(0)
   String content;
+  @HiveField(1)
   DateTime date;
+  @HiveField(2)
   bool isComplete;
 
   Task({
@@ -11,9 +19,9 @@ class Task {
 
   factory Task.fromMap(Map task) {
     return Task(
-        content: task['content'],
-        date: task['data'],
-        isComplete: task['isComplete']);
+        content: task["content"],
+        date: task["date"],
+        isComplete: task["isComplete"]);
   }
 
   Map asMap() {

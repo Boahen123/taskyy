@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskyy/main.dart';
 import 'package:intl/intl.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:taskyy/models/boxes.dart';
+import 'package:taskyy/models/task.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late double _deviceHeight, _deviceWidth;
+  String? newTask;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: _taskList(),
+      body: _taskView(),
       floatingActionButton: _addTask(),
     );
   }
@@ -63,11 +67,44 @@ class _HomeState extends State<Home> {
         child: const Icon(Icons.add));
   }
 
+  Widget _taskView() {
+    boxTasks.put('task3',
+        Task(content: "BAnku", date: DateTime.now(), isComplete: false));
+    return ListView.builder(
+        itemCount: boxTasks.length,
+        itemBuilder: (BuildContext context, int index) {
+          Task task = boxTasks.getAt(index);
+          return ListTile(
+            title: Text(task.content,
+                style: const TextStyle(decoration: TextDecoration.lineThrough)),
+            subtitle: Text("${task.date}"),
+            trailing: Icon(
+              Icons.check_box_outlined,
+              color: customColor[800],
+            ),
+          );
+        });
+  }
+
   void _displayTaskPopup() {
     showDialog(
         context: context,
         builder: (BuildContext contextt) {
-          return const AlertDialog();
+          return AlertDialog(
+            title: const Text("Add Task"),
+            content: SingleChildScrollView(
+              child: TextField(
+                onSubmitted: (value) {},
+                onChanged: (textInput) {
+                  setState(() {
+                    newTask = textInput;
+                  });
+                },
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+          );
         });
   }
 }
