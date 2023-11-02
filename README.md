@@ -14,7 +14,7 @@ View all tasks here
 <br/>
 <br/>
 
-<img src="assets/main_screen.png" alt="Taskyy" style="zoom: 25%;" />
+<img src="assets/main_screen.png" alt="Taskyy" width=400 height=750 />
 
 # Add a new task
 
@@ -22,7 +22,7 @@ Add a new task, data and time of addition of task will be displayed.
 <br/>
 <br/>
 
-<img src="assets/main_screen.png" alt="Taskyy" style="zoom: 25%;" />
+<img src="assets/main_screen.png" alt="Taskyy" width=400 height=750 />
 
 # How To
 
@@ -30,4 +30,4 @@ A guide on how to use the app
 <br/>
 <br/>
 
-<img src="assets/main_screen.png" alt="Taskyy" style="zoom: 25%;" />
+<img src="assets/main_screen.png" alt="Taskyy" width=400 height=750 />
